@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sürpriz 🤍</title>
+    <title>Nərminimə Sürpriz 🤍</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
@@ -15,7 +15,7 @@
             min-height: 100vh; display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- Overlay ve Kart --- */
+        /* --- Quiz Paneli --- */
         #quiz-overlay {
             position: fixed; inset: 0; background: #fff0f3;
             z-index: 9999; display: flex; flex-direction: column;
@@ -24,59 +24,73 @@
         }
 
         .quiz-card {
-            background: white; padding: 30px; border-radius: 20px;
+            background: white; padding: 30px; border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 400px; width: 100%;
         }
 
         .quiz-card h2 { font-family: 'Dancing Script', cursive; color: #d6336c; font-size: 1.8rem; margin-top: 0; }
         
         .option-btn {
-            display: block; width: 100%; margin: 10px 0; padding: 12px;
+            display: block; width: 100%; margin: 12px 0; padding: 14px;
             border: 2px solid #ffccd5; border-radius: 50px; background: none;
             cursor: pointer; transition: all 0.3s; font-size: 1rem; color: #4a4a4a;
+            font-weight: 600;
         }
-        .option-btn:hover { background: #ffccd5; color: white; }
+        .option-btn:hover { background: #ffccd5; color: white; border-color: #ffccd5; }
 
-        /* --- Açıq Sual Girişi --- */
+        /* --- Açıq Sual --- */
         #input-container { margin: 20px 0; display: none; }
         input[type="text"] {
-            padding: 12px; width: 80%; border: 2px solid #ffccd5;
-            border-radius: 10px; font-size: 1rem; text-align: center; outline: none;
+            padding: 12px; width: 85%; border: 2px solid #ffccd5;
+            border-radius: 15px; font-size: 1rem; text-align: center; outline: none;
+            margin-bottom: 15px;
         }
         .check-btn {
-            margin-top: 10px; background: #d6336c; color: white;
-            border: none; padding: 10px 25px; border-radius: 50px; cursor: pointer;
+            background: #d6336c; color: white; border: none;
+            padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold;
         }
 
-        /* --- Rozovu Barmaq İzi --- */
+        /* --- Çəhrayı Barmaq İzi --- */
         #fingerprint-section { display: none; text-align: center; }
         .finger-wrapper {
-            position: relative; width: 100px; height: 100px;
-            margin: 25px auto; display: flex; align-items: center; justify-content: center;
+            position: relative; width: 120px; height: 120px;
+            margin: 20px auto; display: flex; align-items: center; justify-content: center;
         }
         .finger-icon {
-            font-size: 80px; cursor: pointer; user-select: none;
+            font-size: 90px; cursor: pointer; user-select: none;
             color: #ff85a1; transition: all 0.3s;
-            animation: pulse 1.5s infinite;
+            animation: heartBeat 1.5s infinite;
         }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .scanning { color: #d6336c !important; transform: scale(0.9) !important; }
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px #ff85a1); }
+            100% { transform: scale(1); }
+        }
+        .scanning { color: #d6336c !important; transform: scale(0.9) !important; animation: none !important; }
 
-        /* --- Əsas Məzmun --- */
-        #main-content { display: none; width: 100%; padding-bottom: 160px; flex-direction: column; align-items: center; }
-        .letter-container { background: white; width: 85%; max-width: 600px; padding: 35px; margin: 30px auto; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f8d7da; }
+        /* --- Əsas Səhifə (Mətnin Göründüyü Yer) --- */
+        #main-content { display: none; width: 100%; padding-bottom: 180px; flex-direction: column; align-items: center; }
+        .letter-container { 
+            background: white; width: 85%; max-width: 600px; 
+            padding: 35px; margin: 30px auto; border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: block !important; /* Mətnin görünməsini təmin edir */
+        }
         h1 { font-family: 'Dancing Script', cursive; color: #d6336c; text-align: center; font-size: 2.2rem; }
-        .message-text { font-size: 1.05rem; line-height: 1.8; text-align: justify; white-space: pre-line; }
-        .question-section { text-align: center; padding: 20px; width: 100%; min-height: 250px; position: relative; }
-        .question-text { font-size: 1.4rem; color: #c9184a; font-weight: bold; margin-bottom: 40px; }
-        .btn-group { position: relative; height: 150px; width: 100%; }
-        button.main-btn { padding: 15px 50px; font-size: 1.3rem; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        #yesBtn { background-color: #ff4d6d; color: white; position: absolute; left: 50%; transform: translateX(-50%); top: 0; z-index: 10; border: 2px solid white; }
-        #noBtn { background-color: #f1f3f5; color: #888; position: absolute; left: 50%; transform: translateX(-50%); top: 80px; transition: all 0.4s; }
+        .message-text { font-size: 1.05rem; line-height: 1.8; text-align: justify; white-space: pre-line; color: #4a4a4a; }
 
-        #timerBar { position: fixed; bottom: 0; left: 0; width: 100%; background: #ff4d6d; color: white; padding: 15px 0; display: none; flex-direction: column; align-items: center; }
-        .timer-box { display: flex; gap: 10px; margin-top: 5px; }
-        .time-unit { background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 8px; text-align: center; min-width: 50px; }
+        .question-section { text-align: center; padding: 40px 20px; width: 100%; min-height: 250px; position: relative; }
+        .btn-group { position: relative; height: 160px; width: 100%; margin-top: 30px; }
+        
+        button.main-btn { padding: 15px 60px; font-size: 1.3rem; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        #yesBtn { background: #ff4d6d; color: white; position: absolute; left: 50%; transform: translateX(-50%); top: 0; z-index: 10; border: 2px solid white; }
+        #noBtn { background: #f1f3f5; color: #888; position: absolute; left: 50%; transform: translateX(-50%); top: 90px; transition: all 0.3s ease; }
+
+        /* --- Sayğac Paneli --- */
+        #timerBar { position: fixed; bottom: 0; left: 0; width: 100%; background: #ff4d6d; color: white; padding: 20px 0; display: none; flex-direction: column; align-items: center; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); }
+        .timer-box { display: flex; gap: 15px; margin-top: 10px; }
+        .time-unit { background: rgba(255, 255, 255, 0.25); padding: 10px; border-radius: 12px; text-align: center; min-width: 65px; }
+        .time-val { font-size: 1.5rem; font-weight: bold; display: block; }
     </style>
 </head>
 <body>
@@ -84,24 +98,24 @@
     <div id="quiz-overlay">
         <div class="quiz-card">
             <h2 id="quiz-title">Salam Nərmin! 🤍</h2>
-            <p id="quiz-desc">Məhəmmədin sənə bir hədiyyəsi var, testi keçməlisən;)</p>
+            <p id="quiz-desc">Məhəmmədin sənə bir hədiyyəsi var, amma əvvəlcə testi keçməlisən;)</p>
             
             <div id="options-container">
                 <button class="option-btn" onclick="startQuiz()">Hazıram!</button>
             </div>
 
             <div id="input-container">
-                <input type="text" id="openAnswer" placeholder="Cavabı yazın...">
+                <input type="text" id="openAnswer" placeholder="Cavabı bura yazın...">
                 <br>
                 <button class="check-btn" onclick="checkOpenAnswer()">Təsdiqlə</button>
             </div>
             
             <div id="fingerprint-section">
-                <p>Nərmin olduğunu təsdiqləmək üçün barmağını 2 saniyə basıb saxla:</p>
+                <p>Nərmin olduğunuzu sübut etmək üçün barmağınızı 2 saniyə basıb saxlayın:</p>
                 <div class="finger-wrapper">
                     <div class="finger-icon" id="fingerBtn" onmousedown="holdFinger()" onmouseup="releaseFinger()" ontouchstart="holdFinger()" ontouchend="releaseFinger()">☝️</div>
                 </div>
-                <p id="scan-status" style="color: #ff85a1;">Gözlənilir...</p>
+                <p id="scan-status" style="color: #ff85a1; font-weight: bold;">Gözlənilir...</p>
             </div>
         </div>
     </div>
@@ -109,10 +123,21 @@
     <div id="main-content">
         <div class="letter-container">
             <h1>Səni çox sevirəm 🤍</h1>
-            <div class="message-text">Bu mesaja necə başlamaq lazımdır heç bilmirəm... (Məktubun mətni)</div>
+            <div class="message-text">
+                Bu mesaja necə başlamaq lazımdır heç bilmirəm, hər nə qədər sözlər yetərli olmasa da sənə səni nə qədər sevdiyimi izah etmək istəyirəm. Səninlə yaşadığım duyğuları özüm belə anlamıram, bir qadın necə bu qədər mükəmməl olar, heç bir qüsuru necə olmaz bilmirəm.
+
+                Mənim ilk etkiləndiyim və hələ də heyran olduğum yer xasiyyətin idi, hər şeyinlə mənim eynim olduğunu, mənimlə uyuşacağını bəlli elədin. İndi də ilişkimizin içində o qədər mükəmməl davranırsan ki, hər keçən gün səni daha çox sevirəm. Aramızdakı məsafələrə rəğmən, səni hər an yanımda hiss edirəm.
+
+                Hele o dərslərinin ən yorğun vaxtlarında belə, o yorğunluğun içində mənə ayırdığın vaxt, göstərdiyin o ilgi məni sənə daha çox bağlayır. Sən mənim həyatıma girəndən bəri özümü dünyanın ən xoşbəxt insanı hiss edirəm. Səninlə hər şey daha mənalı, daha işıqlıdır.
+
+                İkinci hissə gözəlliyindir, bunun haqqında günlərlə danışa bilərəm. Xəyallarımın qadını sənsən. O qədər mükəmməl görünürsən ki, gözlərimdə başqa qadınları görmək belə istəməməyimi təmin edəcək qədər möhtəşəmsən sən.
+
+                Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əvəzinə izləmək... Bunların hamısını etmək üçün gün sayıram. Yaxşı ki, həyatımdasan.
+            </div>
         </div>
+
         <div class="question-section">
-            <div class="question-text">Nərmin, mənimlə bir ömür yaşamaq istəyərsən? 🤍</div>
+            <div class="question-text" style="font-size: 1.5rem; color: #d6336c; font-weight: bold;">Nərmin, mənimlə bir ömür yaşamaq istəyərsən? 🤍</div>
             <div class="btn-group">
                 <button id="yesBtn" class="main-btn">HƏ!</button>
                 <button id="noBtn" class="main-btn">Yox</button>
@@ -121,12 +146,12 @@
     </div>
 
     <div id="timerBar">
-        <div class="timer-title" style="font-family: 'Dancing Script', cursive;">Həyatımıza başladığımız an 🤍</div>
+        <div class="timer-title" style="font-family: 'Dancing Script', cursive; font-size: 1.6rem;">Həyatımıza başladığımız an 🤍</div>
         <div class="timer-box">
-            <div class="time-unit"><span id="days">0</span><br><small>GÜN</small></div>
-            <div class="time-unit"><span id="hours">00</span><br><small>SAAT</small></div>
-            <div class="time-unit"><span id="minutes">00</span><br><small>DƏQ</small></div>
-            <div class="time-unit"><span id="seconds">00</span><br><small>SAN</small></div>
+            <div class="time-unit"><span class="time-val" id="days">0</span><span>GÜN</span></div>
+            <div class="time-unit"><span class="time-val" id="hours">00</span><span>SAAT</span></div>
+            <div class="time-unit"><span class="time-val" id="minutes">00</span><span>DƏQ</span></div>
+            <div class="time-unit"><span class="time-val" id="seconds">00</span><span>SAN</span></div>
         </div>
     </div>
 
@@ -175,12 +200,12 @@
                 document.getElementById('input-container').style.display = 'none';
                 showFingerprint();
             } else {
-                alert("Səhv cavab! Məhəmmədin ən sevdiyi şeyi bilmirsən? :(");
+                alert("Səhv cavab!");
             }
         }
 
         function showFingerprint() {
-            document.getElementById('quiz-title').innerText = "Son addım!";
+            document.getElementById('quiz-title').innerText = "Son bir addım!";
             document.getElementById('fingerprint-section').style.display = 'block';
         }
 
@@ -191,7 +216,7 @@
             holdTimer = setTimeout(() => {
                 document.getElementById('quiz-overlay').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
-                confetti({ particleCount: 200, spread: 70 });
+                confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
             }, 2000);
         }
 
@@ -203,21 +228,22 @@
             }
         }
 
-        // --- Sayğac və Qaçan Düymə ---
         const noBtn = document.getElementById('noBtn');
         const yesBtn = document.getElementById('yesBtn');
-        const fixedDate = new Date('February 13, 2026 00:00:00').getTime();
+        const startDate = new Date('February 13, 2026 00:00:00').getTime();
 
         noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.position = 'fixed';
-            noBtn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-            noBtn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
         });
 
         yesBtn.addEventListener('click', () => {
             localStorage.setItem('he_basildi', 'true');
             startTimer();
-            confetti({ particleCount: 200 });
+            confetti({ particleCount: 250, spread: 100 });
         });
 
         if(localStorage.getItem('he_basildi')) startTimer();
@@ -225,11 +251,11 @@
         function startTimer() {
             document.getElementById('timerBar').style.display = 'flex';
             setInterval(() => {
-                const diff = new Date().getTime() - fixedDate;
-                document.getElementById('days').innerText = Math.floor(diff/86400000);
-                document.getElementById('hours').innerText = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
-                document.getElementById('minutes').innerText = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
-                document.getElementById('seconds').innerText = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+                const diff = new Date().getTime() - startDate;
+                document.getElementById('days').innerText = Math.max(0, Math.floor(diff / 86400000));
+                document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
             }, 1000);
         }
     </script>
