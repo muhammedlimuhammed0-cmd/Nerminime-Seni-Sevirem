@@ -9,342 +9,198 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #fff0f3 0%, #ffe5ec 100%);
-      font-family: 'Lora', serif;
-      color: #4a4a4a;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
+    body{
+      margin:0;padding:0;
+      background:linear-gradient(135deg,#fff0f3 0%,#ffe5ec 100%);
+      font-family:'Lora',serif;color:#4a4a4a;
+      min-height:100vh;display:flex;flex-direction:column;align-items:center;
+      overflow-x:hidden;
     }
 
-    /* --- Arxa fon ürəklər --- */
-    #hearts-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
+    /* --- Arxa fon ürəklər (AĞ) --- */
+    #hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+    .heart{
+      position:absolute;bottom:-40px;font-size:18px;
+      opacity:.35;
+      filter:drop-shadow(0 0 12px rgba(255,255,255,.75));
+      animation:floatUp linear forwards;
     }
-    .heart {
-      position: absolute;
-      bottom: -40px;
-      font-size: 18px;
-      opacity: 0.35;
-      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.7));
-      animation: floatUp linear forwards;
-    }
-    @keyframes floatUp {
-      from { transform: translateY(0) translateX(0) scale(1) rotate(0deg); }
-      to   { transform: translateY(-120vh) translateX(var(--drift)) scale(var(--scale)) rotate(var(--rot)); }
+    @keyframes floatUp{
+      from{transform:translateY(0) translateX(0) scale(1) rotate(0deg);}
+      to{transform:translateY(-120vh) translateX(var(--drift)) scale(var(--scale)) rotate(var(--rot));}
     }
 
-    /* --- Blur üçün wrapper effekti --- */
-    .blurred {
-      filter: blur(3px);
-      transform: scale(0.995);
-      transition: 0.25s ease;
-    }
+    /* --- Blur üçün wrapper --- */
+    .blurred{filter:blur(3px);transform:scale(.995);transition:.25s ease;}
 
     /* --- Cinematic overlay --- */
-    #yesOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255, 240, 243, 0.70);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      padding: 20px;
-      text-align: center;
+    #yesOverlay{
+      position:fixed;inset:0;
+      background:rgba(255,240,243,.70);
+      backdrop-filter:blur(6px);
+      display:none;align-items:center;justify-content:center;
+      z-index:10000;padding:20px;text-align:center;
     }
-    .yesModal {
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 22px;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.12);
-      padding: 26px 22px;
-      max-width: 420px;
-      width: 100%;
-      border: 2px solid rgba(255, 204, 213, 0.65);
-      animation: popIn 0.28s ease;
+    .yesModal{
+      background:rgba(255,255,255,.92);
+      border-radius:22px;
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      padding:26px 22px;
+      max-width:420px;width:100%;
+      border:2px solid rgba(255,204,213,.65);
+      animation:popIn .28s ease;
     }
-    @keyframes popIn {
-      from { transform: scale(0.92); opacity: 0; }
-      to   { transform: scale(1); opacity: 1; }
+    @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+    .yesTitle{
+      font-family:'Dancing Script',cursive;
+      color:#d6336c;font-size:2.1rem;margin:0;
     }
-    .yesTitle {
-      font-family: 'Dancing Script', cursive;
-      color: #d6336c;
-      font-size: 2.1rem;
-      margin: 0 0 8px 0;
-    }
-    .yesText {
-      margin: 0;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      color: #4a4a4a;
-      font-weight: 600;
-    }
-    .shake { animation: shake 0.35s ease; }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      20% { transform: translateX(-6px); }
-      40% { transform: translateX(6px); }
-      60% { transform: translateX(-4px); }
-      80% { transform: translateX(4px); }
-      100% { transform: translateX(0); }
+    .yesText{margin:8px 0 0 0;font-size:1.05rem;line-height:1.6;font-weight:600;}
+    .shake{animation:shake .35s ease;}
+    @keyframes shake{
+      0%{transform:translateX(0)}20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)}60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}100%{transform:translateX(0)}
     }
 
-    /* --- Glow highlight (Nərmin) --- */
-    .highlight {
-      background: linear-gradient(90deg, #ff4d6d, #ff85a1);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight: 700;
-      text-shadow: 0 0 18px rgba(255, 133, 161, 0.30);
-    }
-
-    /* --- Typing caret --- */
-    .typing-caret::after {
-      content: "▍";
-      display: inline-block;
-      margin-left: 4px;
-      opacity: 1;
-      animation: caretBlink 0.9s infinite;
-      color: #d6336c;
-      font-weight: 700;
-    }
-    @keyframes caretBlink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
+    /* --- Highlight --- */
+    .highlight{
+      background:linear-gradient(90deg,#ff4d6d,#ff85a1);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      font-weight:700;text-shadow:0 0 18px rgba(255,133,161,.30);
     }
 
     /* --- Quiz Paneli --- */
-    #quiz-overlay {
-      position: fixed;
-      inset: 0;
-      background: #fff0f3;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      text-align: center;
+    #quiz-overlay{
+      position:fixed;inset:0;background:#fff0f3;
+      z-index:9999;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;padding:20px;text-align:center;
+    }
+    .quiz-card{
+      background:#fff;padding:30px;border-radius:25px;
+      box-shadow:0 10px 30px rgba(0,0,0,.1);
+      max-width:400px;width:100%;
+      position:relative;z-index:1;
+    }
+    .quiz-card h2{
+      font-family:'Dancing Script',cursive;color:#d6336c;
+      font-size:1.8rem;margin-top:0;
+    }
+    .option-btn{
+      display:block;width:100%;margin:12px 0;padding:14px;
+      border:2px solid #ffccd5;border-radius:50px;background:none;
+      cursor:pointer;transition:all .3s;font-size:1rem;color:#4a4a4a;font-weight:600;
+    }
+    .option-btn:hover{background:#ffccd5;color:#fff;border-color:#ffccd5;}
+
+    /* --- Açıq sual --- */
+    #input-container{margin:20px 0;display:none;}
+    input[type="text"]{
+      padding:12px;width:85%;border:2px solid #ffccd5;
+      border-radius:15px;font-size:1rem;text-align:center;outline:none;margin-bottom:15px;
+    }
+    .check-btn{
+      background:#d6336c;color:#fff;border:none;
+      padding:12px 30px;border-radius:50px;cursor:pointer;font-weight:bold;
     }
 
-    .quiz-card {
-      background: white;
-      padding: 30px;
-      border-radius: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-      position: relative;
-      z-index: 1;
+    /* --- Barmaq izi --- */
+    #fingerprint-section{display:none;text-align:center;}
+    .finger-wrapper{
+      position:relative;width:120px;height:120px;margin:20px auto;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .finger-icon{
+      font-size:90px;cursor:pointer;user-select:none;color:#ff85a1;
+      transition:all .3s;animation:heartBeat 1.5s infinite;
+    }
+    @keyframes heartBeat{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.1);filter:drop-shadow(0 0 15px #ff85a1)}
+      100%{transform:scale(1)}
+    }
+    .scanning{color:#d6336c!important;transform:scale(.9)!important;animation:none!important;}
+
+    /* --- Main --- */
+    #main-content{
+      display:none;width:100%;
+      padding-bottom:340px; /* timerBar mətnin üstünü örtməsin */
+      flex-direction:column;align-items:center;
+      position:relative;z-index:1;
+    }
+    .letter-container{
+      background:#fff;width:85%;max-width:600px;
+      padding:35px;margin:30px auto;border-radius:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.08);
+      display:block!important;
+    }
+    h1{
+      font-family:'Dancing Script',cursive;color:#d6336c;
+      text-align:center;font-size:2.2rem;
     }
 
-    .quiz-card h2 {
-      font-family: 'Dancing Script', cursive;
-      color: #d6336c;
-      font-size: 1.8rem;
-      margin-top: 0;
+    /* --- Mətn blurdan yavaş-yavaş açılsın --- */
+    .message-text{
+      font-size:1.05rem;line-height:1.8;text-align:justify;white-space:pre-line;color:#4a4a4a;
+    }
+    .reveal{
+      opacity:0;
+      filter:blur(10px);
+      transform:translateY(10px);
+    }
+    .reveal.show{
+      animation:revealText 2.2s ease forwards;
+    }
+    @keyframes revealText{
+      from{opacity:0;filter:blur(10px);transform:translateY(10px);}
+      to{opacity:1;filter:blur(0px);transform:translateY(0);}
     }
 
-    .option-btn {
-      display: block;
-      width: 100%;
-      margin: 12px 0;
-      padding: 14px;
-      border: 2px solid #ffccd5;
-      border-radius: 50px;
-      background: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 1rem;
-      color: #4a4a4a;
-      font-weight: 600;
+    .question-section{text-align:center;padding:40px 20px;width:100%;min-height:260px;position:relative;}
+    .btn-group{position:relative;height:190px;width:100%;margin-top:30px;}
+    button.main-btn{
+      padding:15px 60px;font-size:1.3rem;border:none;border-radius:50px;cursor:pointer;
+      font-weight:bold;box-shadow:0 4px 15px rgba(0,0,0,.15);
     }
-    .option-btn:hover { background: #ffccd5; color: white; border-color: #ffccd5; }
-
-    /* --- Açıq Sual --- */
-    #input-container { margin: 20px 0; display: none; }
-    input[type="text"] {
-      padding: 12px;
-      width: 85%;
-      border: 2px solid #ffccd5;
-      border-radius: 15px;
-      font-size: 1rem;
-      text-align: center;
-      outline: none;
-      margin-bottom: 15px;
-    }
-    .check-btn {
-      background: #d6336c;
-      color: white;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: bold;
+    #yesBtn{
+      background:#ff4d6d;color:#fff;position:absolute;left:50%;transform:translateX(-50%);
+      top:0;z-index:10;border:2px solid #fff;
     }
 
-    /* --- Çəhrayı Barmaq İzi --- */
-    #fingerprint-section { display: none; text-align: center; }
-    .finger-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 20px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .finger-icon {
-      font-size: 90px;
-      cursor: pointer;
-      user-select: none;
-      color: #ff85a1;
-      transition: all 0.3s;
-      animation: heartBeat 1.5s infinite;
-    }
-    @keyframes heartBeat {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); filter: drop-shadow(0 0 15px #ff85a1); }
-      100% { transform: scale(1); }
-    }
-    .scanning {
-      color: #d6336c !important;
-      transform: scale(0.9) !important;
-      animation: none !important;
+    /* ✅ YOX düyməsi görünməsin deyə düzəlişlər */
+    #noBtn{
+      background:#ffffff;
+      color:#777;
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top:95px;
+      z-index:9;
+      border:2px solid #e9ecef;
+      box-shadow:0 4px 15px rgba(0,0,0,.10);
+      display:block;
     }
 
-    /* --- Əsas Səhifə --- */
-    #main-content {
-      display: none;
-      width: 100%;
-      padding-bottom: 340px; /* timerBar üstünü örtməsin */
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
+    /* --- TimerBar slide-up --- */
+    #timerBar{
+      position:fixed;bottom:0;left:0;width:100%;
+      background:#ff4d6d;color:#fff;padding:20px 0;
+      display:none;flex-direction:column;align-items:center;
+      box-shadow:0 -5px 20px rgba(0,0,0,.1);z-index:9998;
 
-    .letter-container {
-      background: white;
-      width: 85%;
-      max-width: 600px;
-      padding: 35px;
-      margin: 30px auto;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      display: block !important;
+      transform:translateY(120%);
+      transition:transform .5s ease;
     }
-
-    h1 {
-      font-family: 'Dancing Script', cursive;
-      color: #d6336c;
-      text-align: center;
-      font-size: 2.2rem;
-    }
-
-    .message-text {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      text-align: justify;
-      white-space: pre-line;
-      color: #4a4a4a;
-    }
-
-    .question-section {
-      text-align: center;
-      padding: 40px 20px;
-      width: 100%;
-      min-height: 250px;
-      position: relative;
-    }
-
-    .btn-group { position: relative; height: 160px; width: 100%; margin-top: 30px; }
-
-    button.main-btn {
-      padding: 15px 60px;
-      font-size: 1.3rem;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    }
-
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 0;
-      z-index: 10;
-      border: 2px solid white;
-    }
-
-    #noBtn {
-      background: #f1f3f5;
-      color: #888;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 90px;
-      transition: all 0.3s ease;
-    }
-
-    /* --- Sayğac Paneli --- */
-    #timerBar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #ff4d6d;
-      color: white;
-      padding: 20px 0;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-      z-index: 9998;
-
-      /* slide-up */
-      transform: translateY(120%);
-      transition: transform 0.5s ease;
-    }
-    #timerBar.show { transform: translateY(0); }
-
-    .timer-box { display: flex; gap: 15px; margin-top: 10px; }
-    .time-unit {
-      background: rgba(255, 255, 255, 0.25);
-      padding: 10px;
-      border-radius: 12px;
-      text-align: center;
-      min-width: 65px;
-    }
-    .time-val {
-      font-size: 1.5rem;
-      font-weight: bold;
-      display: block;
-    }
+    #timerBar.show{transform:translateY(0);}
+    .timer-box{display:flex;gap:15px;margin-top:10px;}
+    .time-unit{background:rgba(255,255,255,.25);padding:10px;border-radius:12px;text-align:center;min-width:65px;}
+    .time-val{font-size:1.5rem;font-weight:bold;display:block;}
   </style>
 </head>
 
 <body>
-  <!-- Arxa fon ürəklər -->
   <div id="hearts-bg"></div>
 
-  <!-- HƏ basanda cinematic overlay -->
   <div id="yesOverlay">
     <div class="yesModal">
       <div class="yesTitle">Həmişə Bir yerdə Olaq Gözəlim 🤍</div>
@@ -371,10 +227,10 @@
         <p>Nərmin olduğunuzu sübut etmək üçün barmağınızı 2 saniyə basıb saxlayın:</p>
         <div class="finger-wrapper">
           <div class="finger-icon" id="fingerBtn"
-            onmousedown="holdFinger()" onmouseup="releaseFinger()"
-            ontouchstart="holdFinger()" ontouchend="releaseFinger()">☝️</div>
+               onmousedown="holdFinger()" onmouseup="releaseFinger()"
+               ontouchstart="holdFinger()" ontouchend="releaseFinger()">☝️</div>
         </div>
-        <p id="scan-status" style="color: #ff85a1; font-weight: bold;">Gözlənilir...</p>
+        <p id="scan-status" style="color:#ff85a1;font-weight:bold;">Gözlənilir...</p>
       </div>
     </div>
   </div>
@@ -383,11 +239,8 @@
     <div class="letter-container">
       <h1>Səni çox sevirəm 🤍</h1>
 
-      <!-- Typing effekti -->
-      <div class="message-text typing-caret" id="typedMessage"></div>
-
-      <!-- Orijinal mətn gizli saxlanılır -->
-      <div id="messageSource" style="display:none;">
+      <!-- ✅ Artıq typing YOXDUR: blurdan yavaş-yavaş açılır -->
+      <div class="message-text reveal" id="messageText">
 Bu mesaja necə başlamaq lazımdır heç bilmirəm, hər nə qədər sözlər yetərli olmasa da sənə səni nə qədər sevdiyimi izah etmək istəyirəm. Səninlə yaşadığım duyğuları özüm belə anlamıram, bir qadın necə bu qədər mükəmməl olar, heç bir qüsuru necə olmaz bilmirəm.
 
 Mənim ilk etkiləndiyim və hələ də heyran olduğum yer xasiyyətin idi, hər şeyinlə mənim eynim olduğunu, mənimlə uyuşacağını bəlli elədin. İndi də ilişkimizin içində o qədər mükəmməl davranırsan ki, hər keçən gün səni daha çox sevirəm. Aramızdakı məsafələrə rəğmən, səni hər an yanımda hiss edirəm.
@@ -401,7 +254,7 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
     </div>
 
     <div class="question-section">
-      <div class="question-text" style="font-size: 1.5rem; color: #d6336c; font-weight: bold;">
+      <div class="question-text" style="font-size:1.5rem;color:#d6336c;font-weight:bold;">
         <span class="highlight">Nərmin</span>, mənimlə bir ömür yaşamaq istəyərsən? 🤍
       </div>
       <div class="btn-group">
@@ -412,7 +265,7 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
   </div>
 
   <div id="timerBar">
-    <div class="timer-title" style="font-family: 'Dancing Script', cursive; font-size: 1.6rem;">Həyatımıza başladığımız an 🤍</div>
+    <div class="timer-title" style="font-family:'Dancing Script',cursive;font-size:1.6rem;">Həyatımıza başladığımız an 🤍</div>
     <div class="timer-box">
       <div class="time-unit"><span class="time-val" id="days">0</span><span>GÜN</span></div>
       <div class="time-unit"><span class="time-val" id="hours">00</span><span>SAAT</span></div>
@@ -422,214 +275,172 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
   </div>
 
   <script>
-    /* ----------------------------
-       Arxa fon ürəklər (AĞ 🤍)
-    ---------------------------- */
+    /* --- Arxa fon ürəklər spawn --- */
     const heartsBg = document.getElementById('hearts-bg');
+    function spawnHeart(){
+      const el=document.createElement('div');
+      el.className='heart';
+      el.textContent='🤍';
 
-    function spawnHeart() {
-      const el = document.createElement('div');
-      el.className = 'heart';
-      el.textContent = '🤍';
+      const left=Math.random()*100;
+      const duration=6+Math.random()*6;
+      const drift=(Math.random()*120-60)+'px';
+      const scale=(0.7+Math.random()*1.0).toFixed(2);
+      const rot=(Math.random()*80-40)+'deg';
 
-      const left = Math.random() * 100; // vw
-      const duration = 6 + Math.random() * 6; // 6-12s
-      const drift = (Math.random() * 120 - 60) + 'px'; // -60..60
-      const scale = (0.7 + Math.random() * 1.0).toFixed(2);
-      const rot = (Math.random() * 80 - 40) + 'deg';
-
-      el.style.left = left + 'vw';
-      el.style.animationDuration = duration + 's';
-      el.style.setProperty('--drift', drift);
-      el.style.setProperty('--scale', scale);
-      el.style.setProperty('--rot', rot);
-      el.style.opacity = (0.12 + Math.random() * 0.28).toFixed(2);
-      el.style.fontSize = (14 + Math.random() * 16).toFixed(0) + 'px';
+      el.style.left=left+'vw';
+      el.style.animationDuration=duration+'s';
+      el.style.setProperty('--drift',drift);
+      el.style.setProperty('--scale',scale);
+      el.style.setProperty('--rot',rot);
+      el.style.opacity=(0.12+Math.random()*0.28).toFixed(2);
+      el.style.fontSize=(14+Math.random()*16).toFixed(0)+'px';
 
       heartsBg.appendChild(el);
-      setTimeout(() => el.remove(), duration * 1000);
+      setTimeout(()=>el.remove(),duration*1000);
     }
+    setInterval(spawnHeart,450);
 
-    setInterval(spawnHeart, 450);
-
-    /* ----------------------------
-       Typing effect (məktub)
-    ---------------------------- */
-    const typedEl = document.getElementById('typedMessage');
-    const sourceText = document.getElementById('messageSource').textContent.trim();
-
-    function escapeHtml(str) {
-      return str
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
-    }
-
-    function renderWithHighlight(fullText) {
-      let safe = escapeHtml(fullText);
-      safe = safe.replace(/nərmin/gi, (m) => `<span class="highlight">${m}</span>`);
-      safe = safe.replace(/\n/g, '<br>');
-      typedEl.innerHTML = safe;
-    }
-
-    function typeLetter(text, speed = 18) {
-      typedEl.classList.add('typing-caret');
-      let i = 0;
-      let current = '';
-
-      const timer = setInterval(() => {
-        current += text[i];
-        typedEl.textContent = current;
-        i++;
-
-        if (i >= text.length) {
-          clearInterval(timer);
-          typedEl.classList.remove('typing-caret');
-          renderWithHighlight(text);
-        }
-      }, speed);
-    }
-
-    /* ----------------------------
-       Quiz logic
-    ---------------------------- */
-    const questions = [
-      { q: "Məhəmmədin tam adı və soyadı nədir?", a: ["A- MEHEMMED MEHEMMEDLI", "B- MAMI MEHEMMEDLI", "C- MEHEMMEDELI MEHEMMED"], correct: 0 },
-      { q: "Məhəmməd hansı tip boydur?", a: ["A- AZERİ", "B- OZBEK", "C- ERMENI"], correct: 1 },
-      { q: "Məhəmmədin bu dünyada ən sevdiyi nədir?", type: "open" }
+    /* --- Quiz --- */
+    const questions=[
+      { q:"Məhəmmədin tam adı və soyadı nədir?", a:["A- MEHEMMED MEHEMMEDLI","B- MAMI MEHEMMEDLI","C- MEHEMMEDELI MEHEMMED"], correct:0 },
+      { q:"Məhəmməd hansı tip boydur?", a:["A- AZERİ","B- OZBEK","C- ERMENI"], correct:1 },
+      { q:"Məhəmmədin bu dünyada ən sevdiyi nədir?", type:"open" }
     ];
+    let currentQ=0;
 
-    let currentQ = 0;
-
-    function startQuiz() {
-      document.getElementById('quiz-desc').style.display = 'none';
+    function startQuiz(){
+      document.getElementById('quiz-desc').style.display='none';
       showQuestion();
     }
 
-    function showQuestion() {
-      const qData = questions[currentQ];
-      document.getElementById('quiz-title').innerText = qData.q;
+    function showQuestion(){
+      const qData=questions[currentQ];
+      document.getElementById('quiz-title').innerText=qData.q;
 
-      if (qData.type === "open") {
-        document.getElementById('options-container').style.display = 'none';
-        document.getElementById('input-container').style.display = 'block';
-      } else {
-        let html = "";
-        qData.a.forEach((opt, index) => {
-          html += `<button class="option-btn" onclick="checkAnswer(${index})">${opt}</button>`;
+      if(qData.type==="open"){
+        document.getElementById('options-container').style.display='none';
+        document.getElementById('input-container').style.display='block';
+      }else{
+        let html="";
+        qData.a.forEach((opt,index)=>{
+          html+=`<button class="option-btn" onclick="checkAnswer(${index})">${opt}</button>`;
         });
-        document.getElementById('options-container').innerHTML = html;
-        document.getElementById('options-container').style.display = 'block';
-        document.getElementById('input-container').style.display = 'none';
+        document.getElementById('options-container').innerHTML=html;
+        document.getElementById('options-container').style.display='block';
+        document.getElementById('input-container').style.display='none';
       }
     }
 
-    function checkAnswer(idx) {
-      if (idx === questions[currentQ].correct) {
+    function checkAnswer(idx){
+      if(idx===questions[currentQ].correct){
         currentQ++;
         showQuestion();
-      } else {
+      }else{
         alert("Səhvdir! Yenidən yoxla.");
       }
     }
 
-    function checkOpenAnswer() {
-      const ans = document.getElementById('openAnswer').value.toLowerCase().trim();
-      if (ans === "nermin") {
-        document.getElementById('input-container').style.display = 'none';
+    function checkOpenAnswer(){
+      const ans=document.getElementById('openAnswer').value.toLowerCase().trim();
+      if(ans==="nermin"){
+        document.getElementById('input-container').style.display='none';
         showFingerprint();
-      } else {
+      }else{
         alert("Səhv cavab!");
       }
     }
 
-    function showFingerprint() {
-      document.getElementById('quiz-title').innerText = "Son bir addım!";
-      document.getElementById('fingerprint-section').style.display = 'block';
+    function showFingerprint(){
+      document.getElementById('quiz-title').innerText="Son bir addım!";
+      document.getElementById('fingerprint-section').style.display='block';
     }
 
+    /* --- Finger hold --- */
     let holdTimer;
-    function holdFinger() {
+    function holdFinger(){
       document.getElementById('fingerBtn').classList.add('scanning');
-      document.getElementById('scan-status').innerText = "Doğrulanır...";
-      holdTimer = setTimeout(() => {
-        document.getElementById('quiz-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.7 } });
+      document.getElementById('scan-status').innerText="Doğrulanır...";
+      holdTimer=setTimeout(()=>{
+        document.getElementById('quiz-overlay').style.display='none';
+        document.getElementById('main-content').style.display='flex';
+        confetti({ particleCount:200, spread:80, origin:{ y:0.7 } });
 
-        // main açılan kimi typing başlasın
-        typedEl.textContent = "";
-        typeLetter(sourceText, 18);
-      }, 2000);
+        // ✅ Mətn blurdan yavaş-yavaş açılsın
+        const msg=document.getElementById('messageText');
+        msg.classList.remove('show'); // restart üçün
+        void msg.offsetWidth;         // reflow
+        msg.classList.add('show');
+
+      },2000);
     }
 
-    function releaseFinger() {
+    function releaseFinger(){
       clearTimeout(holdTimer);
       document.getElementById('fingerBtn').classList.remove('scanning');
-      if (document.getElementById('quiz-overlay').style.display !== 'none') {
-        document.getElementById('scan-status').innerText = "Yarımçıq qaldı!";
+      if(document.getElementById('quiz-overlay').style.display!=='none'){
+        document.getElementById('scan-status').innerText="Yarımçıq qaldı!";
       }
     }
 
-    /* ----------------------------
-       NO button qaçma + YES cinematic
-    ---------------------------- */
-    const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    const startDate = new Date('February 13, 2026 00:00:00').getTime();
+    /* --- NO qaçma (hover + touch) --- */
+    const noBtn=document.getElementById('noBtn');
+    function moveNoBtn(){
+      const x=Math.random()*(window.innerWidth - noBtn.offsetWidth);
+      const y=Math.random()*(window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.position='fixed';
+      noBtn.style.left=x+'px';
+      noBtn.style.top=y+'px';
+      noBtn.style.zIndex=9999;
+    }
+    noBtn.addEventListener('mouseenter', moveNoBtn);
+    noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); moveNoBtn(); }, {passive:false});
 
-    noBtn.addEventListener('mouseover', () => {
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-      noBtn.style.position = 'fixed';
-      noBtn.style.left = x + 'px';
-      noBtn.style.top = y + 'px';
-    });
+    /* --- YES cinematic + timer --- */
+    const yesBtn=document.getElementById('yesBtn');
+    const startDate=new Date('February 13, 2026 00:00:00').getTime();
 
-    yesBtn.addEventListener('click', () => {
-      localStorage.setItem('he_basildi', 'true');
+    yesBtn.addEventListener('click', ()=>{
+      localStorage.setItem('he_basildi','true');
 
-      const overlay = document.getElementById('yesOverlay');
-      const main = document.getElementById('main-content');
+      const overlay=document.getElementById('yesOverlay');
+      const main=document.getElementById('main-content');
 
-      overlay.style.display = 'flex';
+      overlay.style.display='flex';
       main.classList.add('blurred');
       document.body.classList.add('shake');
 
-      confetti({ particleCount: 220, spread: 100 });
+      confetti({ particleCount:220, spread:100 });
 
-      setTimeout(() => {
-        overlay.style.display = 'none';
+      setTimeout(()=>{
+        overlay.style.display='none';
         main.classList.remove('blurred');
         document.body.classList.remove('shake');
 
         startTimer();
-        confetti({ particleCount: 250, spread: 110 });
-      }, 1800);
+        confetti({ particleCount:250, spread:110 });
+      },1800);
     });
 
-    if (localStorage.getItem('he_basildi')) {
+    if(localStorage.getItem('he_basildi')){
       startTimer();
     }
 
-    function startTimer() {
-      const bar = document.getElementById('timerBar');
-      bar.style.display = 'flex';
-      setTimeout(() => bar.classList.add('show'), 10);
+    function startTimer(){
+      const bar=document.getElementById('timerBar');
+      bar.style.display='flex';
+      setTimeout(()=>bar.classList.add('show'),10);
 
-      // interval təkrar açılmasın
-      if (window.__timerStarted) return;
-      window.__timerStarted = true;
+      if(window.__timerStarted) return;
+      window.__timerStarted=true;
 
-      setInterval(() => {
-        const diff = new Date().getTime() - startDate;
-        document.getElementById('days').innerText = Math.max(0, Math.floor(diff / 86400000));
-        document.getElementById('hours').innerText = String(Math.max(0, Math.floor((diff % 86400000) / 3600000))).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(Math.max(0, Math.floor((diff % 3600000) / 60000))).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(Math.max(0, Math.floor((diff % 60000) / 1000))).padStart(2, '0');
-      }, 1000);
+      setInterval(()=>{
+        const diff=new Date().getTime()-startDate;
+        document.getElementById('days').innerText=Math.max(0,Math.floor(diff/86400000));
+        document.getElementById('hours').innerText=String(Math.max(0,Math.floor((diff%86400000)/3600000))).padStart(2,'0');
+        document.getElementById('minutes').innerText=String(Math.max(0,Math.floor((diff%3600000)/60000))).padStart(2,'0');
+        document.getElementById('seconds').innerText=String(Math.max(0,Math.floor((diff%60000)/1000))).padStart(2,'0');
+      },1000);
     }
   </script>
 </body>
