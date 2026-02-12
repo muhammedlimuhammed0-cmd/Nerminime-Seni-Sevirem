@@ -30,39 +30,6 @@
       to{transform:translateY(-120vh) translateX(var(--drift)) scale(var(--scale)) rotate(var(--rot));}
     }
 
-    /* --- Blur üçün wrapper --- */
-    .blurred{filter:blur(3px);transform:scale(.995);transition:.25s ease;}
-
-    /* --- Cinematic overlay --- */
-    #yesOverlay{
-      position:fixed;inset:0;
-      background:rgba(255,240,243,.70);
-      backdrop-filter:blur(6px);
-      display:none;align-items:center;justify-content:center;
-      z-index:10000;padding:20px;text-align:center;
-    }
-    .yesModal{
-      background:rgba(255,255,255,.92);
-      border-radius:22px;
-      box-shadow:0 14px 40px rgba(0,0,0,.12);
-      padding:26px 22px;
-      max-width:420px;width:100%;
-      border:2px solid rgba(255,204,213,.65);
-      animation:popIn .28s ease;
-    }
-    @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
-    .yesTitle{
-      font-family:'Dancing Script',cursive;
-      color:#d6336c;font-size:2.1rem;margin:0;
-    }
-    .yesText{margin:8px 0 0 0;font-size:1.05rem;line-height:1.6;font-weight:600;}
-    .shake{animation:shake .35s ease;}
-    @keyframes shake{
-      0%{transform:translateX(0)}20%{transform:translateX(-6px)}
-      40%{transform:translateX(6px)}60%{transform:translateX(-4px)}
-      80%{transform:translateX(4px)}100%{transform:translateX(0)}
-    }
-
     /* --- Highlight --- */
     .highlight{
       background:linear-gradient(90deg,#ff4d6d,#ff85a1);
@@ -124,7 +91,6 @@
     /* --- Main --- */
     #main-content{
       display:none;width:100%;
-      padding-bottom:340px; /* timerBar mətnin üstünü örtməsin */
       flex-direction:column;align-items:center;
       position:relative;z-index:1;
     }
@@ -166,27 +132,58 @@
       background:#ff4d6d;color:#fff;position:absolute;left:50%;transform:translateX(-50%);
       top:0;z-index:10;border:2px solid #fff;
     }
-
-    /* ✅ YOX düyməsi görünməsin deyə düzəlişlər */
     #noBtn{
-      background:#ffffff;
-      color:#777;
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      top:95px;
-      z-index:9;
-      border:2px solid #e9ecef;
+      background:#ffffff;color:#777;
+      position:absolute;left:50%;transform:translateX(-50%);
+      top:95px;z-index:9;border:2px solid #e9ecef;
       box-shadow:0 4px 15px rgba(0,0,0,.10);
       display:block;
     }
 
-    /* --- TimerBar slide-up --- */
+    /* --- Overlay: HƏ basanda çıxacaq və klikə qədər qalacaq --- */
+    #yesOverlay{
+      position:fixed;inset:0;
+      background:rgba(255,240,243,.72);
+      backdrop-filter:blur(8px);
+      display:none;align-items:center;justify-content:center;
+      z-index:10000;padding:20px;text-align:center;
+    }
+    .yesModal{
+      background:rgba(255,255,255,.92);
+      border-radius:24px;
+      box-shadow:0 14px 45px rgba(0,0,0,.14);
+      padding:28px 24px;
+      max-width:440px;width:100%;
+      border:2px solid rgba(255,204,213,.70);
+      animation:popIn .28s ease;
+    }
+    @keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+    .yesTitle{
+      font-family:'Dancing Script',cursive;
+      color:#d6336c;font-size:2.25rem;margin:0;
+      text-shadow:0 0 18px rgba(214,51,108,.18);
+    }
+
+    /* --- Blur effekti (overlay açıq olanda main blur olsun) --- */
+    .blurred{filter:blur(3px);transform:scale(.995);transition:.25s ease;}
+    .shake{animation:shake .35s ease;}
+    @keyframes shake{
+      0%{transform:translateX(0)}20%{transform:translateX(-6px)}
+      40%{transform:translateX(6px)}60%{transform:translateX(-4px)}
+      80%{transform:translateX(4px)}100%{transform:translateX(0)}
+    }
+
+    /* --- Sayğac: artıq mətni örtməsin deyə STICKY --- */
     #timerBar{
-      position:fixed;bottom:0;left:0;width:100%;
-      background:#ff4d6d;color:#fff;padding:20px 0;
-      display:none;flex-direction:column;align-items:center;
-      box-shadow:0 -5px 20px rgba(0,0,0,.1);z-index:9998;
+      position:sticky;
+      bottom:0;
+      width:100%;
+      background:#ff4d6d;color:#fff;
+      padding:20px 0;
+      display:none;
+      flex-direction:column;align-items:center;
+      box-shadow:0 -5px 20px rgba(0,0,0,.1);
+      z-index:9998;
 
       transform:translateY(120%);
       transition:transform .5s ease;
@@ -201,10 +198,10 @@
 <body>
   <div id="hearts-bg"></div>
 
-  <div id="yesOverlay">
+  <!-- ✅ HƏ basanda çıxan mesaj (yalnız bu yazı olacaq) -->
+  <div id="yesOverlay" title="Bağlamaq üçün ekrana toxun">
     <div class="yesModal">
-      <div class="yesTitle">Həmişə Bir yerdə Olaq Gözəlim 🤍</div>
-      <p class="yesText"><span class="highlight">Nərmin</span>, bu “HƏ!” mənim həyatımın ən gözəl cavabıdır.</p>
+      <div class="yesTitle">Həmişə Bir Yerdə Olaq Gözəlim 🤍</div>
     </div>
   </div>
 
@@ -239,7 +236,7 @@
     <div class="letter-container">
       <h1>Səni çox sevirəm 🤍</h1>
 
-      <!-- ✅ Artıq typing YOXDUR: blurdan yavaş-yavaş açılır -->
+      <!-- ✅ Mətn blurdan yavaş-yavaş açılsın -->
       <div class="message-text reveal" id="messageText">
 Bu mesaja necə başlamaq lazımdır heç bilmirəm, hər nə qədər sözlər yetərli olmasa da sənə səni nə qədər sevdiyimi izah etmək istəyirəm. Səninlə yaşadığım duyğuları özüm belə anlamıram, bir qadın necə bu qədər mükəmməl olar, heç bir qüsuru necə olmaz bilmirəm.
 
@@ -262,20 +259,21 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
         <button id="noBtn" class="main-btn">Yox</button>
       </div>
     </div>
-  </div>
 
-  <div id="timerBar">
-    <div class="timer-title" style="font-family:'Dancing Script',cursive;font-size:1.6rem;">Həyatımıza başladığımız an 🤍</div>
-    <div class="timer-box">
-      <div class="time-unit"><span class="time-val" id="days">0</span><span>GÜN</span></div>
-      <div class="time-unit"><span class="time-val" id="hours">00</span><span>SAAT</span></div>
-      <div class="time-unit"><span class="time-val" id="minutes">00</span><span>DƏQ</span></div>
-      <div class="time-unit"><span class="time-val" id="seconds">00</span><span>SAN</span></div>
+    <!-- ✅ Sticky sayğac buradadır: mətni örtmür -->
+    <div id="timerBar">
+      <div class="timer-title" style="font-family:'Dancing Script',cursive;font-size:1.6rem;">Həyatımıza başladığımız an 🤍</div>
+      <div class="timer-box">
+        <div class="time-unit"><span class="time-val" id="days">0</span><span>GÜN</span></div>
+        <div class="time-unit"><span class="time-val" id="hours">00</span><span>SAAT</span></div>
+        <div class="time-unit"><span class="time-val" id="minutes">00</span><span>DƏQ</span></div>
+        <div class="time-unit"><span class="time-val" id="seconds">00</span><span>SAN</span></div>
+      </div>
     </div>
   </div>
 
   <script>
-    /* --- Arxa fon ürəklər spawn --- */
+    /* --- Arxa fon ürəklər --- */
     const heartsBg = document.getElementById('hearts-bg');
     function spawnHeart(){
       const el=document.createElement('div');
@@ -366,12 +364,11 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
         document.getElementById('main-content').style.display='flex';
         confetti({ particleCount:200, spread:80, origin:{ y:0.7 } });
 
-        // ✅ Mətn blurdan yavaş-yavaş açılsın
+        // Mətn blurdan açılsın
         const msg=document.getElementById('messageText');
-        msg.classList.remove('show'); // restart üçün
-        void msg.offsetWidth;         // reflow
+        msg.classList.remove('show');
+        void msg.offsetWidth;
         msg.classList.add('show');
-
       },2000);
     }
 
@@ -396,30 +393,28 @@ Yanaqlarını sıxmaq, saçlarınla oynayıb öpmək, gözlərini mənzərə əv
     noBtn.addEventListener('mouseenter', moveNoBtn);
     noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); moveNoBtn(); }, {passive:false});
 
-    /* --- YES cinematic + timer --- */
+    /* --- YES overlay (klikə qədər qalır) + timer --- */
     const yesBtn=document.getElementById('yesBtn');
+    const overlay=document.getElementById('yesOverlay');
+    const main=document.getElementById('main-content');
+
     const startDate=new Date('February 13, 2026 00:00:00').getTime();
 
     yesBtn.addEventListener('click', ()=>{
       localStorage.setItem('he_basildi','true');
 
-      const overlay=document.getElementById('yesOverlay');
-      const main=document.getElementById('main-content');
-
       overlay.style.display='flex';
       main.classList.add('blurred');
-      document.body.classList.add('shake');
 
-      confetti({ particleCount:220, spread:100 });
+      confetti({ particleCount:260, spread:120 });
 
-      setTimeout(()=>{
+      // ✅ Overlay yalnız ekrana klik edəndə bağlansın
+      overlay.onclick = () => {
         overlay.style.display='none';
         main.classList.remove('blurred');
-        document.body.classList.remove('shake');
-
         startTimer();
-        confetti({ particleCount:250, spread:110 });
-      },1800);
+        confetti({ particleCount:200, spread:100 });
+      };
     });
 
     if(localStorage.getItem('he_basildi')){
